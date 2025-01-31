@@ -23,7 +23,7 @@ class _AnimateScreenState extends State<AnimateScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: GestureDetector(
-          onTap: ,
+          // onTap: ,
           child: Container(
             width: 140,
             height: 140,
