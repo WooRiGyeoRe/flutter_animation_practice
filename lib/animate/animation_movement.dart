@@ -24,5 +24,7 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     on State<T>, TickerProviderStateMixin<T> {
 
       // 애니메이션 컨트롤러 정의
+      late AnimationController 
+      
 
     }

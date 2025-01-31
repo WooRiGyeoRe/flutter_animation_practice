@@ -29,7 +29,9 @@ class _AnimationBallState extends State<AnimationBall>
           // });
         },
         child: AnimatedBuilder(
-            animation: Listenable.merge(listenables),
+            // Listenable.merge() =>  여러 개의 Listenable 객체들을 결합해 하나의 Listenable로 만드는 방법
+            // ( ) 에 들어가야 할 것은? => 여기서는 Animation 객체일듯?
+            animation: Listenable.merge(),
             builder: (context, child) {
               return Container(
                 // width: ballSize,
