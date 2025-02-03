@@ -18,7 +18,9 @@ class _AnimationMovementState extends State<AnimationMovement> {
 */
 
 // mixin
+import 'package:animate_practice/animate/custom_bounceout_curve.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 
 mixin AnimationMovementMixin<T extends StatefulWidget>
     on State<T>, TickerProviderStateMixin<T> {
@@ -29,6 +31,7 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
   late Animation<double> sizeAnimation; // 원형 볼 사이즈
   late Animation<double> bounceAnimation; // 원형 볼 커브
 
+  // initState => 상태 초기화 (위젯이 처음으로 생성될 때 한 번만 호출됨)
   @override
   void initState() {
     super.initState();
@@ -36,21 +39,26 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     // AnimationController sizeAnimationController 초기화
     sizeAnimationController = AnimationController(
       vsync: this,
+      // duration: const Duration(microseconds: 380),
       duration: const Duration(seconds: 1),
     );
 
     sizeAnimation = Tween<double>(begin: 140, end: 219).animate(
       CurvedAnimation(
         parent: sizeAnimationController,
-        curve: Curves.easeOut,
+        // curve: Curves.easeOut,  => 기본 사용
+        // SpringSimulation 대신 Cubic 베지어 곡선 이용
+        curve: const Cubic(0.23, 0.86, 0.29, 1),
       ),
     );
 
     // 원래 크기로 복귀
     sizeAnimationController.addStatusListener(
-      (status) {
+      (status) async {
         if (status == AnimationStatus.completed) {
           sizeAnimationController.reverse();
+          await Future.delayed(const Duration(microseconds: 200));
+          bounceAnimationController.forward();
         }
       },
     );
@@ -58,8 +66,23 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     // AnimationController bounceAnimationController 초기화
     bounceAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(microseconds: 1000),
     );
+
+    bounceAnimation = Tween<double>(begin: 140, end: 219).animate(
+      CurvedAnimation(
+        parent: bounceAnimationController,
+        curve: CustomBounceCurve(),
+      ),
+    );
+    setState(() {});
+
+    bounceAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        sizeAnimationController.reset();
+        bounceAnimationController.reset();
+      }
+    });
   }
 
   @override
