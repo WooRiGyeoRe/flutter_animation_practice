@@ -17,8 +17,8 @@ class _AnimationBallState extends State<AnimationBall>
         print('======= AnimationBall Tap!!!! =======');
 
         // 애니메이션 중복 실행 방지
-        if (sizeAnimationController.isAnimating ||
-            bounceAnimationController.isAnimating) return;
+        // if (sizeAnimationController.isAnimating ||
+        //     bounceAnimationController.isAnimating) return;
 
         // 애니메이션 실행
         sizeAnimationController.forward();
@@ -28,15 +28,18 @@ class _AnimationBallState extends State<AnimationBall>
         // Listenable.merge() =>  여러 개의 Listenable 객체들을 결합해 하나의 Listenable로 만드는 방법
         // ( ) 에 들어가야 할 것은? => 여기서는 Animation 객체일듯?
         animation: Listenable.merge([
-          sizeAnimationController,
-          bounceAnimationController,
+  
           sizeAnimation,
-          bounceAnimation
+          bounceAnimationController,
+
         ]),
         builder: (context, child) {
+          double size = sizeAnimationController.isAnimating
+              ? sizeAnimation.value
+              : bounceAnimation.value;
           return Container(
-            width: sizeAnimation.value,
-            height: sizeAnimation.value,
+            width: sizeAnimation.isDismissed ? 140: size,
+            height: sizeAnimation.isDismissed ? 140: size,
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 255, 166, 65), // #FF9D00
               shape: BoxShape.circle,

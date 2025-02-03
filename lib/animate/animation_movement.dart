@@ -39,8 +39,7 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     // AnimationController sizeAnimationController 초기화
     sizeAnimationController = AnimationController(
       vsync: this,
-      // duration: const Duration(microseconds: 380),
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 380),
     );
 
     sizeAnimation = Tween<double>(begin: 140, end: 219).animate(
@@ -56,7 +55,7 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     sizeAnimationController.addStatusListener(
       (status) async {
         if (status == AnimationStatus.completed) {
-          sizeAnimationController.reverse();
+          // sizeAnimationController.reverse();
           await Future.delayed(const Duration(microseconds: 200));
           bounceAnimationController.forward();
         }
@@ -66,16 +65,16 @@ mixin AnimationMovementMixin<T extends StatefulWidget>
     // AnimationController bounceAnimationController 초기화
     bounceAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(microseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
 
-    bounceAnimation = Tween<double>(begin: 140, end: 219).animate(
+    bounceAnimation = Tween<double>(begin: 219, end: 140).animate(
       CurvedAnimation(
         parent: bounceAnimationController,
         curve: CustomBounceCurve(),
       ),
     );
-    setState(() {});
+    // setState(() {});
 
     bounceAnimationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
