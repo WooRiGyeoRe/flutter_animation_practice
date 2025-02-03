@@ -14,16 +14,14 @@ class _AnimationBallState extends State<AnimationBall>
   double ballSize = 140;
 
   // initState => 상태 초기화 (위젯이 처음으로 생성될 때 한 번만 호출됨)
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async {
           print('======= AnimationBall Tap!!!! =======');
+          if (sizeAnimationController.isAnimating) return; // 애니메이션 중복 실행 방지
+          sizeAnimationController.forward(); // 애니메이션 실행
           // setState(() {
           //   ballSize = ballSize == 140 ? 219 : 140;
           // });
@@ -31,13 +29,16 @@ class _AnimationBallState extends State<AnimationBall>
         child: AnimatedBuilder(
             // Listenable.merge() =>  여러 개의 Listenable 객체들을 결합해 하나의 Listenable로 만드는 방법
             // ( ) 에 들어가야 할 것은? => 여기서는 Animation 객체일듯?
-            animation: Listenable.merge(),
+            animation: Listenable.merge(
+                [sizeAnimationController, bounceAnimationController]),
             builder: (context, child) {
               return Container(
                 // width: ballSize,
                 // height: ballSize,
-                width: 140,
-                height: 140,
+                // width: 140,
+                // height: 140,
+                width: sizeAnimation.value,
+                height: sizeAnimation.value,
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 255, 166, 65), // #FF9D00
                   shape: BoxShape.circle,
